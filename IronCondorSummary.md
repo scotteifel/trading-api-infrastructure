@@ -2,7 +2,7 @@
 
 ## Overview
 
-An automated options trading system that executes iron condor strategies on SPX (S&P 500 Index) options using Interactive Brokers API. The bot runs autonomously during market hours, managing position entry, monitoring, and exit with built-in risk management.
+An automated options trading system that executes iron condor strategies using Interactive Brokers API. The bot runs autonomously during market hours, managing position entry, monitoring, and exit with built-in risk management.
 
 ## Key Achievements
 
@@ -21,19 +21,18 @@ An automated options trading system that executes iron condor strategies on SPX 
    - Market hours detection and scheduling
    - Trading cycle orchestration
    - Position monitoring and reconciliation
-   - First-trade profit targeting (50% within first hour)
+   - First-trade first-hour monitoring
 
 2. **Option Scanner** (`src/strategy/option_scanner.py`)
 
    - Greeks-based strike selection (delta targeting)
    - Real-time option chain analysis
-   - CBOE exchange integration for SPX options
 
 3. **Iron Condor Strategy** (`src/strategy/iron_condor.py`)
 
    - Multi-leg spread construction
    - Premium balance validation
-   - Credit target enforcement ($100-$200 range)
+   - Credit target enforcement
    - Wing width optimization
 
 4. **Order Execution** (`src/execution/order_manager.py`)
@@ -46,7 +45,7 @@ An automated options trading system that executes iron condor strategies on SPX 
 5. **Risk Management** (`src/risk/stop_manager.py`)
 
    - OCO stop-loss orders (stop-limit + stop-market backup)
-   - Profit target monitoring ($0.05 close threshold)
+   - Profit target monitoring 
    - Stop order verification after placement
    - Automatic stop cancellation on position close
 
@@ -118,7 +117,7 @@ An automated options trading system that executes iron condor strategies on SPX 
 - **Max Positions**: Configurable concurrent position limit
 - **Credit Targets**: Configurable credit range validation
 - **Wing Width**: Adjustable spread width with flexible sizing
-- **Premium Balance**: Automated balance validation between spread sides
+- **Premium Balance**: Automated spread validation
 
 ### Risk Controls
 
@@ -203,11 +202,9 @@ An automated options trading system that executes iron condor strategies on SPX 
 **Solution**:
 
 - VNC server for remote GUI access
-- Time-restricted firewall (6-hour morning window before trading)
 - IP whitelist + password authentication (3 security layers)
 - Automated cron schedule with daylight savings support
 - VNC service runs 24/7 to keep Gateway alive
-- Firewall blocks access outside window (bot continues trading)
 
 ## Code Quality & Best Practices
 
@@ -223,18 +220,17 @@ An automated options trading system that executes iron condor strategies on SPX 
 
 ### Production Environment
 
-- **Platform**: DigitalOcean Droplet (Ubuntu, 2GB RAM)
+- **Platform**: DigitalOcean Droplet (Ubuntu)
 - **Process Management**: systemd services
-- **Auto-restart**: On failure with 10-second delay
+- **Auto-restart**: On failure with delay
 - **Logging**: Both file-based and systemd journal
 - **Monitoring**: Web UI + Telegram alerts
-- **Gateway Access**: VNC with time-restricted firewall access
 
 ### Systemd Services
 
 1. `iron-condor-bot.service` - Main trading bot
 2. `iron-condor-web.service` - Web dashboard
-3. `vncserver@1.service` - IB Gateway GUI access (for daily login)
+3. `vncserver@1.service` - IB Gateway GUI access (for regular re-login)
 
 All configured for automatic startup on boot and restart on failure.
 
@@ -262,28 +258,16 @@ Traditional VPN setups require complex port forwarding, dynamic DNS, and expose 
 
 1. **Web UI (24/7)** - `http://100.x.x.x:8080` (Tailscale IP)
    - Real-time monitoring, configuration changes, log viewing
-   - Password-protected, accessible from any Tailscale-connected device
-2. **VNC (Time-restricted)** - `100.x.x.x:5901` (Tailscale IP)
-   - Remote desktop for IB Gateway login (3:30-9:30 AM ET, weekdays)
-   - Time-based firewall + Tailscale IP whitelist
-3. **SSH (Advanced)** - `ssh root@100.x.x.x` (Tailscale IP)
+   - Password-protected
+2. **SSH (Advanced)** - `ssh root@100.x.x.x` (Tailscale IP)
    - Direct server access for configuration and troubleshooting
 
 **Security Layers**:
 
 1. **Tailscale mesh network** - Traffic never touches public internet
-2. **Time-based firewall rules** - VNC only accessible during trading hours
-3. **IP whitelist** - Only approved Tailscale IPs can connect
-4. **Password authentication** - VNC and Web UI password-protected
-5. **Automated scheduling** - Cron jobs with DST support
-
-**Daily Workflow**:
-
-- Client connects via Tailscale (always on, secure)
-- VNC firewall opens automatically at 3:30 AM ET
-- Client logs into IB Gateway via VNC desktop
-- VNC firewall closes at 9:30 AM ET (bot continues trading)
-- Client monitors via Web UI throughout the day (24/7 access)
+2. **IP whitelist** - Only approved Tailscale IPs can connect
+3. **Password authentication** - VNC and Web UI password-protected
+4. **Automated scheduling** - Cron jobs with DST support
 
 ## Results & Performance
 
@@ -292,22 +276,13 @@ Traditional VPN setups require complex port forwarding, dynamic DNS, and expose 
 - **Execution Speed**: Orders placed within seconds of signal generation
 - **Position Accuracy**: 100% state reconciliation via periodic broker sync
 
-## Future Enhancements (Potential)
-
-1. **Stop Order Persistence**: Save stop order IDs to state file for restart resilience
-2. **Position Sizing**: Dynamic contract quantity based on account size
-3. **Multi-Symbol Support**: Extend beyond SPX to other indices
-4. **Backtesting**: Historical data replay for strategy validation
-5. **Advanced Greeks**: Implement vega, theta-based adjustments
-6. **Performance Analytics**: Trade metrics and strategy optimization
-
 ## Lessons Learned
 
 1. **State Management is Critical**: Persistent state with reconciliation prevents orphaned positions
 2. **Broker APIs are Complex**: Async event handling requires careful timeout and error management
 3. **Options Trading Nuances**: Greeks, expiration, settlement all need special handling
 4. **Reliability > Features**: Connection recovery and state persistence more valuable than advanced features
-5. **Observability Matters**: Logging and notifications essential for production confidence
+5. **Observability Is Important**: Logging and notifications essential for production confidence
 
 ## Skills Demonstrated
 
@@ -317,7 +292,7 @@ Traditional VPN setups require complex port forwarding, dynamic DNS, and expose 
 - **System Design**: Modular architecture, separation of concerns
 - **DevOps**: Linux systemd, process management, deployment automation
 - **Security**: Multi-layer authentication, firewall management, time-based access control, zero-trust networking
-- **Network Engineering**: Tailscale mesh VPN, VNC setup, UFW firewall rules, cron scheduling
+- **Network Engineering**: Tailscale mesh VPN, VNC setup, cron scheduling
 - **Modern Networking**: WireGuard protocol, NAT traversal, private mesh networks
 - **Error Handling**: Resilient systems with recovery logic
 - **Real-time Systems**: Event-driven architecture with time-sensitive operations
