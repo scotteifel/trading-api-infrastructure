@@ -6,4 +6,5 @@ Built 24/7 production system that scans real-time options data, calculates Greek
 
 Learned IBKR API (complex financial API) from scratch in 2 weeks. Client returned for enhancement work (completed in 1 day).
 
-**Tech**: Python, ib_insync, Flask, React, DigitalOcean
+**Tech**: Python, ib_insync, Flask, DigitalOcean
+
