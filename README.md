@@ -1,80 +1,32 @@
+# Enterprise Trading Platform
 
+Multi-user algorithmic trading platform built from the ground up. Currently live in production serving multiple users for 4+ months.
 
-# Production Trading API Infrastructure
+## What It Does
 
-A production-grade FastAPI trading system currently processing live trades with enterprise-level security and monitoring.
-
-## 🎯 Business Impact
-- **Live Production System**: Serving multiple users for 4+ months
-- **Real Stakes**: Handles real trading decisions and executions
-- **Zero Downtime**: Built for 24/7 reliability with auto-recovery
-- **Multi-User Platform**: Enables non-technical users to deploy strategies independently
-
-## 🏗️ What I Built
-Enterprise-grade algorithmic trading platform with:
-- FastAPI backend with production security (IP whitelisting, rate limiting, auto-banning)
+- Enables non-technical users to deploy automated trading strategies
 - Real-time WebSocket connections for live price monitoring
-- PostgreSQL + Redis architecture for performance and caching
-- TradingView webhook integration with exchange APIs
+- TradingView webhook integration for signal processing
+- Multi-user platform with isolated accounts and strategies
 - Sophisticated hedging system for complex risk management
-- Railway deployment with GitHub CI/CD
+- Live dashboard with real-time metrics and strategy monitoring
 
-## 🚀 Live in Production
+## Technical Architecture
 
-This system has been running in production for 4+ months, handling real trades on Bitget exchange and others.
+- **Backend**: FastAPI (async/await), PostgreSQL, SQLAlchemy (async)
+- **Frontend**: React, TypeScript, Vite, React Router
+- **Real-time**: WebSocket connections for price streaming and live dashboard updates
+- **Security**: IP whitelisting, rate limiting, auto-banning system, Redis-based auth, JWT
+- **Deployment**: Railway with GitHub CI/CD, auto-scaling
+- **APIs**: TradingView webhooks, Bitget exchange API integration
 
-## ✨ Key Features
+## Key Features
 
-### Security & Authentication
+- Production-grade security (IP filtering, rate limits, authentication layers, JWT)
+- Real-time dashboard showing win rate, signal counts, and performance metrics
+- Database abstraction layer reduces strategy deployment from days to hours
+- Handles real trading decisions for multiple concurrent users
+- Connection recovery and error handling for 24/7 uptime
+- Protected routes with authentication context for secure user sessions
 
-- IP whitelist verification for all endpoints
-- API key authentication with environment variables
-- HMAC signature generation for exchange requests
-- Redis-based rate limiting (5 req/minute default)
-
-### Trading Capabilities
-
-- Automated trade execution via TradingView webhooks
-- Automated trade execution on broker OHLC data
-- Support for market and limit orders
-- Futures trading with margin management
-- Intelligent scheduler with cancellation events
-- WebSocket connections for real-time monitoring
-
-### Production Architecture
-
-- Fully async/await implementation
-- Dependency injection pattern
-- Global state management
-- Comprehensive error handling and logging
-- Health check endpoints
-- Multi-instance coordination support
-
-## 🛠 Tech Stack
-
-- **Framework**: FastAPI (Python 3.11+)
-- **Database**: PostgreSQL + SQLAlchemy ORM
-- **Caching**: Redis
-- **Scheduler**: APScheduler
-- **Exchange**: Bitget API
-- **Deployment**: Railway
-
-## 📝 Code Highlights
-
-This repository demonstrates:
-
-- Production-ready async Python
-- Secure API design patterns
-- Complex state management
-- Real-time WebSocket integration
-- Professional error handling
-
-## 🔒 Security Notice
-
-Sensitive information and proprietary trading logic have been removed from this public version.
-
-## 👨‍💻 Author
-
-**Scott E.** - Founding CTO at algorithmic trading startup
-
-- [Upwork Profile] https://www.upwork.com/freelancers/~01528692969b8cd521?mp_source=share
+**Tech**: Python, FastAPI, PostgreSQL, Redis, WebSockets, React, TypeScript, Vite, Railway
